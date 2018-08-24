@@ -1,37 +1,76 @@
+{% set secondView = config('Feedback.secondView') == 'true' ? true : false %}
+{% set columns = secondView ? '12' : '6' %}
+
 <script type="x/template" id="vue-feedback-container">
+
+
     <section class="feedback-container">
 
-        <div class="title">
-            {{ trans("Feedback::Feedback.customerReviews") }}
-            <small class="feedback-average-count"> (${ counts.ratingsCountTotal })</small>
-        </div>
-
-        <div class="feedback-stars-average">
-            <div class="feedback-stars-background clearfix">
-                {% for i in 1..5 %}
-                    <div class="feedback-star">
-                        <i class="fa fa-star"></i>
-                    </div>
-                {% endfor %}
+        {% if not secondView %}
+            <div class="title">
+                {{ trans("Feedback::Feedback.customerReviews") }}
+                <small class="feedback-average-count"> (${ counts.ratingsCountTotal })</small>
             </div>
-            <div class="feedback-stars-overlay-wrap" :style="{ width: ((counts.averageValue * 100) / 5) + '%' }">
-                <div class="feedback-stars-overlay clearfix">
+
+            <div class="feedback-stars-average">
+                <div class="feedback-stars-background clearfix">
                     {% for i in 1..5 %}
                         <div class="feedback-star">
                             <i class="fa fa-star"></i>
                         </div>
                     {% endfor %}
                 </div>
+                <div class="feedback-stars-overlay-wrap" :style="{ width: ((counts.averageValue * 100) / 5) + '%' }">
+                    <div class="feedback-stars-overlay clearfix">
+                        {% for i in 1..5 %}
+                            <div class="feedback-star">
+                                <i class="fa fa-star"></i>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <hr>
+            <hr>
+        {% endif %}
 
         <div class="row my-2">
 
-            <div class="col-sm-6">
+            <div class="col-sm-{{ columns }}" {% if secondView %}style="text-align: center; display: inline-block;"{% endif %}>
 
-                <div class="feedback-bars">
+                {% if secondView %}
+                    <div class="feedback-second-view mr-4" style="display: inline-block;">
+                        <p class="feedback-big-average">
+                            {{ counts.averageValue }}
+                        </p>
+
+                        <div class="feedback-stars-average" id="feedback-stars-average">
+                            <div class="feedback-stars-background clearfix">
+                                {% for i in 1..5 %}
+                                    <div class="feedback-star"><i class="fa fa-star"></i></div>
+                                {% endfor %}
+                            </div>
+                            <div class="feedback-stars-overlay-wrap" style="width:{{ ( counts.averageValue * 100 ) / 5 }}%">
+                                <div class="feedback-stars-overlay clearfix">
+                                    {% for i in 1..5 %}
+                                        <div class="feedback-star"><i class="fa fa-star"></i></div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <p><i class="fa fa-user-o fa-fw" aria-hidden="true"></i>
+                            {% if counts.ratingsCountTotal > 0 %}
+                                {{ counts.ratingsCountTotal }}
+                            {% else %}
+                                {{ trans("Feedback::Feedback.reviewsNo") }}
+                            {% endif %}
+                            {{ trans("Feedback::Feedback.reviews") }}
+                        </p>
+                    </div>
+                {% endif %}
+
+                <div class="feedback-bars" {% if secondView %}style="display: inline-block;"{% endif %}>
 
                     <div class="feedback-bar-wrap">
                         <p class="feedback-bar-text-before">5 <i class="fa fa-star"></i></p>
@@ -78,7 +117,7 @@
             </div>
 
 
-            <div class="col-sm-6">
+            <div class="col-sm-{{ columns }}">
                 <feedback-form
                         v-if="!isLoading"
                         :variation-id="variationId"

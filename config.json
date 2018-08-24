@@ -44,6 +44,14 @@
             "defaultValue": "false"
           }
         },
+        "secondView":{
+          "type": "checkbox",
+          "required": false,
+          "label": "Config.secondView",
+          "options": {
+            "defaultValue": "true"
+          }
+        },
         "numberOfFeedbacks": {
           "type": "inputText",
           "required": false,

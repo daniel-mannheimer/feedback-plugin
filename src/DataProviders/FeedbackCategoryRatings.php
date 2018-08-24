@@ -26,7 +26,7 @@ class FeedbackCategoryRatings
      */
     public function call(Request $request, FeedbackAverageRepositoryContract $feedbackAverageRepository, FeedbackCoreHelper $coreHelper, Twig $twig, $itemData)
     {
-        $itemId = $itemData[0]['item']['id'];
+        $itemId = (int)$itemData[0]['item']['id'];
 
         $average = $feedbackAverageRepository->getFeedbackAverage($itemId);
 

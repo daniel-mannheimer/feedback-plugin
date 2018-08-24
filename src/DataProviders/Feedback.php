@@ -105,11 +105,11 @@ class Feedback
 
             foreach ($orders->getResult() as $order) {
                 foreach ($order->orderItems as $orderItem) {
-                    $purchasedVariations[] = $orderItem->itemVariationId;
+                    $purchasedVariations[] = $orderItem->variation->itemId;
                 }
             }
 
-            $authenticatedContact['hasPurchased'] = in_array($variationId, $purchasedVariations) ? true : false;
+            $authenticatedContact['hasPurchased'] = in_array($itemId, $purchasedVariations) ? true : false;
 
         }
 
@@ -141,7 +141,7 @@ class Feedback
             $highestCount = max($counts);
 
             $counts['ratingsCountTotal'] = $average->ratingsCountTotal;
-            $counts['averageValue'] = $average->averageValue;
+            $counts['averageValue'] = number_format($average->averageValue, 1, '.', '');
             $counts['highestCount'] = $highestCount;
 
         }
@@ -163,17 +163,13 @@ class Feedback
             $feedbacks = $feedbackService->listFeedbacks($feedbackRepository, $page, $itemsPerPage, $with, $filters);
             $feedbackResults = $feedbacks->getResult();
 
-            foreach($feedbackResults as &$feedback){
+            foreach($feedbackResults as $feedback){
                 if($feedback->targetRelation->feedbackRelationType == 'variation'){
                     $feedback->targetRelation->variationAttributes = json_decode($feedback->targetRelation->targetRelationName);
                 }
             }
 
-            if(!is_null($limitFeedbacksPerUserPerItem) && $limitFeedbacksPerUserPerItem != 0){
-                $authenticatedContact['limitReached'] = $limitFeedbacksPerUserPerItem <= $feedbacks->getTotalCount() ? true : false;
-            }else{
-                $authenticatedContact['limitReached'] = false;
-            }
+            $authenticatedContact['limitReached'] = 1 <= $feedbacks->getTotalCount() ? true : false;
 
             $data['feedbacks'] = $feedbackResults;
 
