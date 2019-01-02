@@ -22,7 +22,8 @@
                     isLastPage: true,
                     isLoading: true,
                     itemAttributes: [],
-                    feedbackToDelete: null
+                    feedbackToDelete: null,
+                    counts: {}
                 };
             },
 
@@ -138,9 +139,9 @@
                         var ratingValue = parseInt(feedback.feedbackRating.rating.ratingValue);
                         if ( ratingValue > 0 && ratingValue <= 5 )
                         {
-                            counts['ratingsCountOf' + ratingValue]++;
+                            this.counts['ratingsCountOf' + ratingValue]++;
                         }
-                        counts.ratingsCountTotal++;
+                        this.counts.ratingsCountTotal++;
                     }
                 }
             }
