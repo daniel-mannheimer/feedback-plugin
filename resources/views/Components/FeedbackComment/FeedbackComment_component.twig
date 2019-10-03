@@ -4,14 +4,16 @@
 
             template: '#vue-feedback-comment',
             delimiters: ["${", "}"],
-            props: ['feedback', 'itemAttributes', 'authenticatedUser', 'isReply', 'showControls'],
+            props: ['feedback', 'itemAttributes', 'authenticatedUser', 'isReply', 'showControls', 'classes', 'styles', 'options'],
 
             data: function()
             {
                 return {
+                    authorName: '',
                     replyMessage: '',
                     replyFormVisible: false,
-                    replyListVisible: false
+                    replyListVisible: false,
+                    honeypot: ''
                 };
             },
 
@@ -52,20 +54,22 @@
 
                 displayName: function()
                 {
-                    return this.feedback
-                        .sourceRelation[0]
-                        .sourceRelationLabel
-                        .split(" ")
-                        .map(function(namePart, index)
-                        {
-                            if ( index === 0 )
-                            {
-                                return namePart + " "
-                            }
-                            return namePart.substr(0, 1) + ".";
-                        })
-                        .join("");
+                    var rawName =  this.feedback.sourceRelation[0].sourceRelationLabel;
+
+                    if(rawName !== " ") {
+                        return rawName.split(" ")
+                            .map(function (namePart, index) {
+                                if (index === 0) {
+                                    return namePart + " "
+                                }
+                                return namePart.substr(0, 1) + ".";
+                            })
+                            .join("");
+                    } else {
+                        return "{{ trans("Feedback::Feedback.guestName") }}";
+                    }
                 },
+
                 message: function()
                 {
                     if ( !this.feedback.feedbackComment )
@@ -92,15 +96,17 @@
             methods: {
                 createReply: function()
                 {
-                    if ( !this.replyMessage )
+                    if ( !this.replyMessage || this.honeypot.length > 0)
                     {
                         return;
                     }
+
                     var _self = this;
                     $.ajax({
                         type: 'POST',
                         url: '/rest/feedbacks/feedback/create',
                         data: {
+                            authorName: this.authorName,
                             message: this.replyMessage,
                             targetId: this.feedback.id,
                             type: 'reply'

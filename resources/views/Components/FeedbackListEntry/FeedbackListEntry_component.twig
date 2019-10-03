@@ -4,7 +4,7 @@
 
             template: '#vue-feedback-list-entry',
             delimiters: ["${", "}"],
-            props: ['feedback', 'authenticatedUser', 'itemAttributes', 'isReply', 'showControls'],
+            props: ['feedback', 'authenticatedUser', 'itemAttributes', 'isReply', 'showControls', 'classes', 'styles', 'options'],
 
             data: function()
             {
@@ -25,7 +25,8 @@
                     this.$emit('delete', {
                         feedbackId: this.feedback.id,
                         isReply: this.isReply,
-                        parentFeedbackId: parentFeedbackId
+                        parentFeedbackId: parentFeedbackId,
+                        feedbackObject: this.feedback
                     });
                 },
 

@@ -1,0 +1,119 @@
+<script type="text/javascript">
+    (function($) {
+        Vue.component('feedback-order-container', {
+
+            template: '#vue-feedback-order-container',
+            delimiters: ["${", "}"],
+            props: ['variations', 'items', 'itemUrls', 'itemImages', 'options'],
+
+            data: function()
+            {
+                return {
+                    authenticatedUser: {
+                        id: 0,
+                        isLoggedIn: false
+                    },
+                    isLoading: true,
+                    page: 1
+                };
+            },
+
+            computed: {
+                orderItems: function()
+                {
+                    var aggregate = [];
+
+                    // skip first element: shipping costs
+                    for(var i = 1; i < this.items.length; i++)
+                    {
+                        var key = this.items[i].itemVariationId;
+
+                        aggregate.push({
+                            name: this.variations[key].texts.name1,
+                            image: this.itemImages[key],
+                            url: this.itemUrls[key],
+                            variationId: key,
+                            itemId: this.variations[key].item.id
+                        });
+                    }
+
+                    return aggregate;
+                },
+
+                pagination: function() {
+                    var amount = this.page * this.options.itemsPerRow * this.options.rowsPerPage;
+                    return this.orderItems.slice(0, amount);
+                },
+
+                itemsPerRow: function() {
+                    var realItemsPerRow = Math.min(this.orderItems.length, this.options.itemsPerRow);
+
+                    var all = "grid-template-columns: repeat(" + realItemsPerRow + ", minmax(200px, 1fr));";
+                    var fallback_ie = "-ms-grid-columns: (minmax(200px, 1fr))[" + realItemsPerRow + "];";
+
+                    return fallback_ie + " " + all;
+                }
+            },
+
+            mounted: function()
+            {
+                var _self = this;
+                $.when(
+                    this.getUser()
+                ).done(function() {
+                    _self.isLoading = false;
+                    Vue.nextTick(function () {
+                        // DOM updated
+                        window.dispatchEvent(new Event('resize'));
+                    })
+                });
+            },
+
+            methods: {
+                getUser: function()
+                {
+                    // Get array of item and variationIds
+                    var itemIds = [];
+                    var variationIds = [];
+
+                    for (var i = 0; i < this.orderItems.length; i++)
+                    {
+                        var orderItem = this.orderItems[i];
+                        itemIds.push(orderItem.itemId);
+                        variationIds.push(orderItem.variationId);
+                    }
+                    var data = {
+                      "itemIds": itemIds,
+                      "variationIds": variationIds,
+                      "allowFeedbacksOnlyIfPurchased": false,
+                      "numberOfFeedbacks": this.options.numberOfFeedbacks
+                    };
+
+                    var _self = this;
+                    return $.ajax({
+                        type:           'GET',
+                        url:            '/rest/feedbacks/user',
+                        data:           data,
+                        success:        function(data)
+                        {
+                            _self.authenticatedUser = data;
+                        },
+                        error:          function(jqXHR, textStatus, errorThrown)
+                        {
+                            console.error(errorThrown);
+                        }
+                    });
+                },
+
+                nextPage: function()
+                {
+                    var amount = this.page * this.options.itemsPerRow * this.options.rowsPerPage;
+
+                    if(amount < this.orderItems.length) {
+                        this.page += 1;
+                    }
+                }
+            }
+        });
+    })(jQuery);
+</script>

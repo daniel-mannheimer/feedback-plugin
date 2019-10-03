@@ -1,5 +1,71 @@
 # Release Notes für Feedback
 
+## v3.2.0 (2019-09-30)
+
+### TODO
+
+- Nach dem Update auf v3.2.0 müssen Widgets im Menü **CMS » ShopBuilder** durch Klick auf **Inhalte neu generieren** aktualisiert werden. 
+
+### Hinzugefügt
+
+- Das Feedback-Widget kann jetzt auf der Bestellbestätigungsseite verwendet werden.
+
+## v3.1.2 (2019-09-02)
+
+### Behoben
+
+- Durch einen Fehler waren die strukturierten Daten invalide, wenn für einen Artikel noch keine Sternebewertung vergeben wurde. Dies wurde behoben. 
+- Durch einen Fehler funktionierte die Einstellung "Bewertungssterne anzeigen, wenn keine Bewertungen vorhanden sind" nicht wie gewollt. Dies wurde behoben.
+
+## v3.1.1 (2019-08-22)
+
+### Behoben
+
+- Durch einen Fehler wurden Styles auf bestimmten Templates nicht geladen. Dies wurde behoben. 
+
+## v3.1.0 (2019-08-19)
+
+### TODO
+
+- Nach dem Update auf 3.1.0 muss die Einstellung zur automatischen Veröffentlichung von Rezensionen im Menü **Plugin-Übersicht » Feedback » Einstellungen** erneut vorgenommen werden.
+
+### Hinzugefügt
+
+- Gastbewertungen sind nun möglich.
+- Gastkunden können nun einen Namen an der Rezension hinterlegen.
+- Es wurde ein Honeypot hinzugefügt, um Spam entgegenzuwirken.
+
+### Geändert
+
+- Die Einstellungen für die automatische Veröffentlichung von Rezensionen wurden erweitert.
+
+### Behoben
+
+- Es wurden einige Verbesserung bezüglich der Benutzeroberfläche vorgenommen.
+- Es wurden einige Verbesserungen bezüglich der Performance des Plugins vorgenommen.
+
+## v3.0.0 (2019-08-12)
+
+### Hinzugefügt
+
+- Kompatibilität zum ShopBuilder wurde hergestellt.
+- Die Anzahl der Artikelbewertungen pro Seite kann nun über die Widget-Einstellungen festgelegt werden.
+- Die Größe der Bewertungssterne kann nun über die Widget-Einstellungen festgelegt werden.
+- Das Feld “aggregateRatings”, das die durchschnittliche Bewertung eines Artikels enthält, wurde dem Schema.org Markup hinzugefügt.
+
+### Geändert
+
+- Das Feedback-Plugin wurde in 2 ShopBuilder-Widgets umgebaut. Über das Widget **Artikelbewertung** können Kunden Artikelrezensionen schreiben, die im Webshop angezeigt werden. Das Widget **Bewertungssterne** zeigt den Durchschnittswert der Bewertungen in der Artikelansicht.
+- Die Einstellungen des Plugins wurden größtenteils in die beiden Widgets überführt.
+- Das Feedback-Plugin ist jetzt Open Source.
+- Die bisherigen Container-Verknüpfungen wurden bis auf “Feedback category ratings” entfernt.
+
+### Behoben
+
+- Beim Hinzufügen einer Rezension wurden die Bewertungssterne erst nach erneutem Laden der Seite angezeigt. Dies wurde behoben.
+- Es konnte keine Rezension für Artikel eingereicht werden, wenn nicht auch eine Sternebewertung abgegeben wurde. Dies wurde behoben.
+
+
 ## v2.0.0 (2019-04-29)
 
 ### FEATURE
@@ -84,7 +150,7 @@
 
 - Feedbacks aus dem alten CMS können nun migriert werden.
 - Neue Option: Hinzufügen von Feedbacks ohne Bewertungen ermöglichen.
-- Neue Option: Hinzufügen von Feedbacks nur für gekaufte Artikel. 
+- Neue Option: Hinzufügen von Feedbacks nur für gekaufte Artikel.
 
 ## v1.0.1 (2017-10-11)
 
